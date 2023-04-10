@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import Guess from "./components/Guess";
+import Keyboard from "./components/Keyboard";
+import axios from "axios";
+import { useState } from "react";
 
-function App() {
+const App = () => {
+
+  const [word, setWord] = useState('');
+  const [guessWord, setGuessWord] = useState('');
+
+  axios({
+    method: 'get',
+    url: "https://random-word-api.herokuapp.com/word",
+    params: {
+      length: 5
+    }
+  }).then((res) => {
+    setWord(res.data[0]);
+  });
+
+  const onEnterClick = () => {
+    if (word === guessWord) {
+      // make all boxes green
+      console.log("hooray");
+      return;
+    }
+
+
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="title">
+        <h1>Wordle</h1>
+      </div>
+
+      <Guess guessWord={guessWord}
+          setGuessWord={setGuessWord} />
+
+      <Keyboard onEnterClick={onEnterClick} />
     </div>
   );
 }
